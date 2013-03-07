@@ -1,0 +1,17 @@
+id: TinyMCELanguageSelect
+name: TinyMCELanguageSelect
+version: 1.00
+description: <__trans phrase="">
+author_name: <__trans phrase="ToI Inc.">
+author_link: http://tec.toi-planning.net/
+plugin_link: https://github.com/usualoma/mt-plugin-TinyMCELanguageSelect/
+
+l10n_lexicon:
+    ja:
+        Language: "言語"
+        English: "英語"
+        Japanese: "日本語"
+
+editors:
+    tinymce:
+        extension: extension.tmpl

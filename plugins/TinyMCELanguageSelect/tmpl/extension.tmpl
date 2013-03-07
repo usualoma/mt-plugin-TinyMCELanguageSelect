@@ -1,0 +1,84 @@
+<mt:setvarblock name="js_include" append="1">
+<script type="text/javascript">
+(function($) {
+
+tinymce.create('tinymce.plugins.LanguageSelect', {
+	init: function(ed, url) {
+        var t = this;
+		t.editor = ed;
+
+		ed.onInit.add(function() {
+			if (!ed.settings.readonly) {
+				ed.onNodeChange.add(t.nodeChanged, t);
+			}
+		});
+    },
+	nodeChanged : function(ed, cm, n, co, ob) {
+		var t = this, c, found = false;
+
+		if (c = cm.get('languageselect')) {
+            $.each(ob.parents, function() {
+                if (this.nodeName == 'SPAN' && this.lang) {
+                    found = true;
+				    c.select(this.lang);
+                    return false;
+                }
+            });
+            if (! found) {
+                c.select('');
+            }
+		}
+	},
+	createControl: function(n, cf) {
+		var c;
+
+		switch (n) {
+			case 'languageselect':
+			    var langs = [
+                    {
+                        label: trans('TinyMCELanguageSelectEnglish'),
+                        value: 'en'
+                    },
+                    {
+                        label: trans('TinyMCELanguageSelectJapanese'),
+                        value: 'ja'
+                    }
+                ];
+                var t = this;
+
+			    c = t.editor.controlManager.createListBox('languageselect', {title : trans('TinyMCELanguageSelectLanguage'), onselect : function(v) {
+                    t.editor.formatter.toggle('languageselect', {lang: v});
+				    return false;
+			    }});
+
+                $.each(langs, function() {
+				    c.add(this.label, this.value);
+                });
+
+			    return c;
+		}
+    }
+});
+tinymce.PluginManager.add('languageselect', tinymce.plugins.LanguageSelect);
+
+MT.Editor.TinyMCE.config.plugins += ',languageselect';
+MT.Editor.TinyMCE.config.plugin_mt_wysiwyg_buttons1 += ',languageselect';
+MT.Editor.TinyMCE.config.formats['languageselect'] = {
+    inline: 'span',
+    remove: 'all',
+    attributes: {
+        lang: '%lang'
+    }
+};
+MT.Editor.TinyMCE.config.content_css += ',' + StaticURI + 'plugins/TinyMCELanguageSelect/content.css';
+
+})(jQuery);
+
+
+<__trans_section component="TinyMCELanguageSelect">
+Lexicon['TinyMCELanguageSelectLanguage'] = '<__trans phrase="Language" />';
+Lexicon['TinyMCELanguageSelectEnglish']  = '<__trans phrase="English" />';
+Lexicon['TinyMCELanguageSelectJapanese'] = '<__trans phrase="Japanese" />';
+</__trans_section>
+</script>
+</mt:setvarblock>
